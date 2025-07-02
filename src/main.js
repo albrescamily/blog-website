@@ -51,9 +51,17 @@ class BlogApp {
    * Configura o parser de Markdown
    */
   setupMarked() {
-    marked.setOptions({
+    // Configuração para marked v9+
+    const self = this
+    marked.use({
       breaks: true,
-      gfm: true
+      gfm: true,
+      renderer: {
+        heading(text, level) {
+          const id = self.generateHeadingId(text)
+          return `<h${level} id="${id}">${text}</h${level}>`
+        }
+      }
     })
   }
 
@@ -339,45 +347,58 @@ class BlogApp {
       return
     }
     
-    // Container principal minimalista e centralizado
+    // Container principal com layout de grid
     const content = document.createElement('div')
-    content.className = 'min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200'
+    content.className = 'min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200'
     
     // Botão de voltar para posts do blog
     const backBtn = document.createElement('button')
-    backBtn.className = 'btn-secondary mb-8 self-start'
+    backBtn.className = 'btn-secondary mb-8 ml-6 mt-6'
     backBtn.textContent = '← Voltar para Posts do Blog'
     backBtn.onclick = () => {
       this.navigateToView('list')
     }
     content.appendChild(backBtn)
 
-    // Wrapper centralizado
+    // Wrapper com grid layout
     const wrapper = document.createElement('div')
-    wrapper.className = 'w-full max-w-2xl mx-auto flex flex-col items-center px-4'
+    wrapper.className = 'max-w-7xl mx-auto py-8 px-6 grid grid-cols-1 lg:grid-cols-4 gap-10'
+
+    // Conteúdo principal
+    const main = document.createElement('main')
+    main.className = 'lg:col-span-3'
 
     // Título grande e centralizado
     const title = document.createElement('h1')
-    title.className = 'text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-2 text-center'
+    title.className = 'text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4 text-center lg:text-left'
     title.textContent = post.title
-    wrapper.appendChild(title)
+    main.appendChild(title)
     
     // Data em itálico
     const date = document.createElement('div')
-    date.className = 'text-lg text-gray-500 dark:text-gray-400 italic mb-8 text-center'
+    date.className = 'text-lg text-gray-500 dark:text-gray-400 italic mb-6 text-center lg:text-left'
     date.textContent = post.date
-    wrapper.appendChild(date)
+    main.appendChild(date)
     
     // Categorias e tags
     const categories = this.renderPostCategories(post)
-    categories.className += ' justify-center mb-8'
-    wrapper.appendChild(categories)
+    categories.className += ' justify-center lg:justify-start mb-8'
+    main.appendChild(categories)
     
     // Conteúdo do post
     const postContent = document.createElement('div')
     postContent.className = 'prose prose-lg max-w-none text-left w-full'
     postContent.innerHTML = DOMPurify.sanitize(marked.parse(post.content))
-    wrapper.appendChild(postContent)
+    main.appendChild(postContent)
+    
+    // Configura o observer de interseção para headings
+    this.setupIntersectionObserver()
+    
+    wrapper.appendChild(main)
+    
+    // Sidebar com tabela de conteúdo
+    const sidebar = this.renderPostSidebar(post)
+    wrapper.appendChild(sidebar)
     
     content.appendChild(wrapper)
     container.appendChild(content)
@@ -669,6 +690,20 @@ class BlogApp {
   }
 
   /**
+   * Renderiza a sidebar específica para visualização de post
+   */
+  renderPostSidebar(post) {
+    const sidebar = document.createElement('aside')
+    sidebar.className = 'lg:col-span-1'
+    
+    // Tabela de conteúdo
+    const tableOfContents = this.renderTableOfContents(post)
+    sidebar.appendChild(tableOfContents)
+    
+    return sidebar
+  }
+
+  /**
    * Renderiza seção de categorias
    */
   renderCategoriesSection() {
@@ -719,6 +754,146 @@ class BlogApp {
     section.appendChild(title)
     section.appendChild(list)
     return section
+  }
+
+  /**
+   * Renderiza a tabela de conteúdo
+   */
+  renderTableOfContents(post) {
+    const section = document.createElement('div')
+    section.className = 'table-of-contents sticky top-8'
+    
+    const title = document.createElement('h3')
+    title.textContent = this.translations.t('tableOfContents')
+    
+    const list = document.createElement('div')
+    list.className = 'space-y-1'
+    
+    // Extrai headings do conteúdo do post
+    const headings = this.extractHeadings(post.content)
+    
+    if (headings.length === 0) {
+      const noHeadings = document.createElement('p')
+      noHeadings.className = 'text-gray-500 dark:text-gray-400 text-sm italic'
+      noHeadings.textContent = this.translations.t('onThisPage')
+      list.appendChild(noHeadings)
+    } else {
+      headings.forEach(heading => {
+        const link = document.createElement('a')
+        link.href = `#${heading.id}`
+        link.className = `heading-h${heading.level}`
+        link.textContent = heading.text
+        link.title = `${heading.text} (Nível ${heading.level})`
+        link.style.paddingLeft = `${(heading.level - 1) * 1}rem`
+        link.onclick = (e) => {
+          e.preventDefault()
+          this.scrollToHeading(heading.id)
+          this.updateActiveHeading(heading.id)
+        }
+        list.appendChild(link)
+      })
+    }
+    
+    section.appendChild(title)
+    section.appendChild(list)
+    return section
+  }
+
+  /**
+   * Extrai headings do conteúdo markdown
+   */
+  extractHeadings(content) {
+    const headings = []
+    const lines = content.split('\n')
+    
+    lines.forEach((line, index) => {
+      // Remove espaços em branco no início e fim
+      const trimmedLine = line.trim()
+      
+      // Regex melhorada para capturar headings
+      const match = trimmedLine.match(/^(#{1,6})\s+(.+)$/)
+      if (match) {
+        const level = match[1].length
+        const text = match[2].trim()
+        const id = this.generateHeadingId(text)
+        
+        headings.push({
+          level,
+          text,
+          id
+        })
+      }
+    })
+    
+    return headings
+  }
+
+  /**
+   * Gera um ID único para o heading
+   */
+  generateHeadingId(text) {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+      .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais
+      .replace(/\s+/g, '-') // Substitui espaços por hífens
+      .replace(/-+/g, '-') // Remove hífens duplicados
+      .replace(/^-+|-+$/g, '') // Remove hífens no início e fim
+      .trim()
+  }
+
+  /**
+   * Faz scroll suave para o heading
+   */
+  scrollToHeading(headingId) {
+    const element = document.getElementById(headingId)
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
+
+  /**
+   * Atualiza o heading ativo na tabela de conteúdo
+   */
+  updateActiveHeading(headingId) {
+    // Remove classe active de todos os links
+    const allLinks = document.querySelectorAll('.table-of-contents a')
+    allLinks.forEach(link => link.classList.remove('active'))
+    
+    // Adiciona classe active ao link clicado
+    const activeLink = document.querySelector(`.table-of-contents a[href="#${headingId}"]`)
+    if (activeLink) {
+      activeLink.classList.add('active')
+    }
+  }
+
+  /**
+   * Configura o observer de interseção para detectar headings visíveis
+   */
+  setupIntersectionObserver() {
+    const headings = document.querySelectorAll('.prose h1[id], .prose h2[id], .prose h3[id], .prose h4[id], .prose h5[id], .prose h6[id]')
+    
+    if (headings.length === 0) return
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const headingId = entry.target.id
+          this.updateActiveHeading(headingId)
+        }
+      })
+    }, {
+      rootMargin: '-20% 0px -70% 0px',
+      threshold: 0
+    })
+    
+    headings.forEach(heading => {
+      observer.observe(heading)
+    })
   }
 
   /**

@@ -768,3 +768,63 @@
     transform: scale(1);
   }
 }
+
+/* Tabela de Conteúdo */
+.table-of-contents {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6;
+}
+
+.table-of-contents h3 {
+  @apply text-xl font-semibold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-3;
+}
+
+.table-of-contents a {
+  @apply block text-sm text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200 py-1 border-l-2 border-transparent hover:border-purple-500 pl-3;
+}
+
+.table-of-contents a:hover {
+  @apply bg-purple-50 dark:bg-purple-900/20;
+}
+
+.table-of-contents a.active {
+  @apply text-purple-600 dark:text-purple-400 border-purple-500 bg-purple-50 dark:bg-purple-900/20;
+}
+
+.table-of-contents .heading-h1 {
+  @apply font-semibold text-base;
+}
+
+.table-of-contents .heading-h2 {
+  @apply font-medium text-sm;
+}
+
+.table-of-contents .heading-h3 {
+  @apply text-sm;
+}
+
+.table-of-contents .heading-h4 {
+  @apply text-xs;
+}
+
+.table-of-contents .heading-h5 {
+  @apply text-xs;
+}
+
+.table-of-contents .heading-h6 {
+  @apply text-xs;
+}
+
+/* Scroll suave para headings */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilo para headings com IDs */
+.prose h1[id],
+.prose h2[id],
+.prose h3[id],
+.prose h4[id],
+.prose h5[id],
+.prose h6[id] {
+  scroll-margin-top: 2rem;
+}

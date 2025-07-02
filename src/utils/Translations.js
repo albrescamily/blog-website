@@ -36,7 +36,9 @@ export class Translations {
         readingTime: 'Tempo de leitura',
         publishedOn: 'Publicado em',
         category: 'Categoria',
-        tag: 'Tag'
+        tag: 'Tag',
+        tableOfContents: 'Índice',
+        onThisPage: 'Nesta página'
       },
       'en': {
         home: 'Home',
@@ -68,7 +70,9 @@ export class Translations {
         readingTime: 'Reading time',
         publishedOn: 'Published on',
         category: 'Category',
-        tag: 'Tag'
+        tag: 'Tag',
+        tableOfContents: 'Table of Contents',
+        onThisPage: 'On this page'
       },
       'es': {
         home: 'Inicio',
@@ -100,7 +104,9 @@ export class Translations {
         readingTime: 'Tiempo de lectura',
         publishedOn: 'Publicado el',
         category: 'Categoría',
-        tag: 'Etiqueta'
+        tag: 'Etiqueta',
+        tableOfContents: 'Índice',
+        onThisPage: 'En esta página'
       }
     }
     
