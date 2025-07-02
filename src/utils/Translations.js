@@ -1,0 +1,171 @@
+/**
+ * Translations Utility
+ * Responsável por gerenciar traduções da aplicação
+ */
+
+export class Translations {
+  constructor() {
+    this.translations = {
+      'pt-BR': {
+        home: 'Início',
+        blogPosts: 'Posts do Blog',
+        welcome: 'Bem-vindo ao Meu Blog Minimalista',
+        welcomeSubtitle: 'Aqui você encontra artigos, dicas e ideias sobre tecnologia, programação e muito mais. Todos os posts são escritos em Markdown e gerenciados direto pelo VSCode.',
+        viewAllPosts: 'Ver todos os posts',
+        postCollection: 'Coletânea de Posts',
+        categories: 'Categorias',
+        tags: 'Tags',
+        readMore: 'Ler mais',
+        back: 'Voltar',
+        noPostsFound: 'Nenhum post encontrado.',
+        author: 'Autor',
+        allRightsReserved: 'Todos os direitos reservados.',
+        madeWith: 'Feito com',
+        by: 'por',
+        darkMode: 'Modo escuro',
+        lightMode: 'Modo claro',
+        language: 'Idioma',
+        portuguese: 'Português',
+        english: 'English',
+        spanish: 'Español',
+        search: 'Buscar',
+        searchPlaceholder: 'Buscar posts...',
+        clearFilters: 'Limpar filtros',
+        relatedPosts: 'Posts relacionados',
+        sharePost: 'Compartilhar post',
+        readingTime: 'Tempo de leitura',
+        publishedOn: 'Publicado em',
+        category: 'Categoria',
+        tag: 'Tag'
+      },
+      'en': {
+        home: 'Home',
+        blogPosts: 'Blog Posts',
+        welcome: 'Welcome to My Minimalist Blog',
+        welcomeSubtitle: 'Here you find articles, tips and ideas about technology, programming and much more. All posts are written in Markdown and managed directly through VSCode.',
+        viewAllPosts: 'View all posts',
+        postCollection: 'Post Collection',
+        categories: 'Categories',
+        tags: 'Tags',
+        readMore: 'Read more',
+        back: 'Back',
+        noPostsFound: 'No posts found.',
+        author: 'Author',
+        allRightsReserved: 'All rights reserved.',
+        madeWith: 'Made with',
+        by: 'by',
+        darkMode: 'Dark mode',
+        lightMode: 'Light mode',
+        language: 'Language',
+        portuguese: 'Português',
+        english: 'English',
+        spanish: 'Español',
+        search: 'Search',
+        searchPlaceholder: 'Search posts...',
+        clearFilters: 'Clear filters',
+        relatedPosts: 'Related posts',
+        sharePost: 'Share post',
+        readingTime: 'Reading time',
+        publishedOn: 'Published on',
+        category: 'Category',
+        tag: 'Tag'
+      },
+      'es': {
+        home: 'Inicio',
+        blogPosts: 'Posts del Blog',
+        welcome: 'Bienvenido a Mi Blog Minimalista',
+        welcomeSubtitle: 'Aquí encuentras artículos, consejos e ideas sobre tecnología, programación y mucho más. Todos los posts están escritos en Markdown y gestionados directamente desde VSCode.',
+        viewAllPosts: 'Ver todos los posts',
+        postCollection: 'Colección de Posts',
+        categories: 'Categorías',
+        tags: 'Etiquetas',
+        readMore: 'Leer más',
+        back: 'Volver',
+        noPostsFound: 'No se encontraron posts.',
+        author: 'Autor',
+        allRightsReserved: 'Todos los derechos reservados.',
+        madeWith: 'Hecho con',
+        by: 'por',
+        darkMode: 'Modo oscuro',
+        lightMode: 'Modo claro',
+        language: 'Idioma',
+        portuguese: 'Português',
+        english: 'English',
+        spanish: 'Español',
+        search: 'Buscar',
+        searchPlaceholder: 'Buscar posts...',
+        clearFilters: 'Limpiar filtros',
+        relatedPosts: 'Posts relacionados',
+        sharePost: 'Compartir post',
+        readingTime: 'Tiempo de lectura',
+        publishedOn: 'Publicado el',
+        category: 'Categoría',
+        tag: 'Etiqueta'
+      }
+    }
+    
+    this.currentLanguage = localStorage.getItem('language') || 'pt-BR'
+  }
+
+  /**
+   * Obtém uma tradução
+   */
+  t(key) {
+    return this.translations[this.currentLanguage]?.[key] || 
+           this.translations['pt-BR'][key] || 
+           key
+  }
+
+  /**
+   * Muda o idioma atual
+   */
+  setLanguage(language) {
+    if (this.translations[language]) {
+      this.currentLanguage = language
+      localStorage.setItem('language', language)
+      document.documentElement.lang = language
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Retorna o idioma atual
+   */
+  getCurrentLanguage() {
+    return this.currentLanguage
+  }
+
+  /**
+   * Retorna todos os idiomas disponíveis
+   */
+  getAvailableLanguages() {
+    return Object.keys(this.translations)
+  }
+
+  /**
+   * Retorna todas as traduções para um idioma específico
+   */
+  getTranslationsForLanguage(language) {
+    return this.translations[language] || {}
+  }
+
+  /**
+   * Adiciona uma nova tradução
+   */
+  addTranslation(language, key, value) {
+    if (!this.translations[language]) {
+      this.translations[language] = {}
+    }
+    this.translations[language][key] = value
+  }
+
+  /**
+   * Remove uma tradução
+   */
+  removeTranslation(language, key) {
+    if (this.translations[language]) {
+      delete this.translations[language][key]
+    }
+  }
+} 

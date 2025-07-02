@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "title": "Primeiro Post",
+    "filename": "posts/post-1.md",
+    "date": "2024-01-15",
+    "author": "Camily",
+    "categories": ["Application", "Data"],
+    "tags": ["Tailwind", "Blog"],
+    "image": "/public/cover1.png"
+  },
+  {
+    "id": "2",
+    "title": "Por que eu amo Markdown",
+    "filename": "posts/post-2.md",
+    "date": "2024-01-10",
+    "author": "Camily",
+    "categories": ["Software"],
+    "tags": ["Markdown", "Blog"],
+    "image": "/public/cover2.png"
+  }
+] 
