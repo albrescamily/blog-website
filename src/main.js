@@ -18,6 +18,26 @@ import { PostService } from './services/PostService.js'
 // Importações dos utilitários
 import { Translations } from './utils/Translations.js'
 import { ThemeManager } from './utils/ThemeManager.js'
+import { HeadingExtractor } from './utils/HeadingExtractor.js'
+
+/**
+ * Exemplo de uso do HeadingExtractor:
+ * 
+ * // Extrair headings
+ * const headings = HeadingExtractor.extractHeadings(content)
+ * 
+ * // Validar headings
+ * const validHeadings = headings.filter(HeadingExtractor.isValidHeading)
+ * 
+ * // Filtrar por nível
+ * const h2h3 = HeadingExtractor.filterByLevel(headings, 2, 3)
+ * 
+ * // Criar hierarquia
+ * const hierarchy = HeadingExtractor.createHierarchy(headings)
+ * 
+ * // Obter estatísticas
+ * const stats = HeadingExtractor.getStatistics(headings)
+ */
 
 /**
  * Classe principal da aplicação
@@ -52,13 +72,12 @@ class BlogApp {
    */
   setupMarked() {
     // Configuração para marked v9+
-    const self = this
     marked.use({
       breaks: true,
       gfm: true,
       renderer: {
         heading(text, level) {
-          const id = self.generateHeadingId(text)
+          const id = HeadingExtractor.generateHeadingId(text)
           return `<h${level} id="${id}">${text}</h${level}>`
         }
       }
@@ -770,21 +789,27 @@ class BlogApp {
     list.className = 'space-y-1'
     
     // Extrai headings do conteúdo do post
-    const headings = this.extractHeadings(post.content)
+    const headings = HeadingExtractor.extractHeadings(post.content)
     
-    if (headings.length === 0) {
+    // Valida se há headings válidos
+    const validHeadings = headings.filter(HeadingExtractor.isValidHeading)
+    
+    if (validHeadings.length === 0) {
       const noHeadings = document.createElement('p')
       noHeadings.className = 'text-gray-500 dark:text-gray-400 text-sm italic'
       noHeadings.textContent = this.translations.t('onThisPage')
       list.appendChild(noHeadings)
     } else {
-      headings.forEach(heading => {
+      // Filtra apenas headings de nível 2-6 para a tabela de conteúdo
+      const tocHeadings = HeadingExtractor.filterByLevel(validHeadings, 2, 6)
+      
+      tocHeadings.forEach(heading => {
         const link = document.createElement('a')
         link.href = `#${heading.id}`
         link.className = `heading-h${heading.level}`
         link.textContent = heading.text
         link.title = `${heading.text} (Nível ${heading.level})`
-        link.style.paddingLeft = `${(heading.level - 1) * 1}rem`
+        link.style.paddingLeft = `${(heading.level - 2) * 1}rem`
         link.onclick = (e) => {
           e.preventDefault()
           this.scrollToHeading(heading.id)
@@ -799,49 +824,7 @@ class BlogApp {
     return section
   }
 
-  /**
-   * Extrai headings do conteúdo markdown
-   */
-  extractHeadings(content) {
-    const headings = []
-    const lines = content.split('\n')
-    
-    lines.forEach((line, index) => {
-      // Remove espaços em branco no início e fim
-      const trimmedLine = line.trim()
-      
-      // Regex melhorada para capturar headings
-      const match = trimmedLine.match(/^(#{1,6})\s+(.+)$/)
-      if (match) {
-        const level = match[1].length
-        const text = match[2].trim()
-        const id = this.generateHeadingId(text)
-        
-        headings.push({
-          level,
-          text,
-          id
-        })
-      }
-    })
-    
-    return headings
-  }
 
-  /**
-   * Gera um ID único para o heading
-   */
-  generateHeadingId(text) {
-    return text
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // Remove acentos
-      .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais
-      .replace(/\s+/g, '-') // Substitui espaços por hífens
-      .replace(/-+/g, '-') // Remove hífens duplicados
-      .replace(/^-+|-+$/g, '') // Remove hífens no início e fim
-      .trim()
-  }
 
   /**
    * Faz scroll suave para o heading

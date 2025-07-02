@@ -57,7 +57,8 @@ blog-website/
 │   │   └── PostService.js       # Gerenciamento de posts
 │   └── utils/                   # Utilitários
 │       ├── Translations.js      # Sistema de traduções
-│       └── ThemeManager.js      # Gerenciador de tema
+│       ├── ThemeManager.js      # Gerenciador de tema
+│       └── HeadingExtractor.js  # Extrator de headings
 ├── posts/
 │   ├── posts.json               # Metadados dos posts
 │   ├── post-1.md                # Posts em Markdown
@@ -80,6 +81,7 @@ blog-website/
 ### **Utilitários**
 - **Translations.js**: Sistema robusto de internacionalização
 - **ThemeManager.js**: Gerenciamento avançado de tema com detecção automática
+- **HeadingExtractor.js**: Utilitário para extração e gerenciamento de headings markdown
 
 ## 🌙 Dark Mode Toggle
 
@@ -122,6 +124,39 @@ const text = translations.t('welcome')
 - 🇧🇷 Português (pt-BR)
 - 🇺🇸 Inglês (en)
 - 🇪🇸 Espanhol (es)
+
+## 📋 Heading Extractor
+
+Utilitário especializado para extração e gerenciamento de headings markdown:
+
+```javascript
+import { HeadingExtractor } from './utils/HeadingExtractor.js'
+
+// Extrair headings
+const headings = HeadingExtractor.extractHeadings(content)
+
+// Validar headings
+const validHeadings = headings.filter(HeadingExtractor.isValidHeading)
+
+// Filtrar por nível
+const h2h3 = HeadingExtractor.filterByLevel(headings, 2, 3)
+
+// Criar hierarquia
+const hierarchy = HeadingExtractor.createHierarchy(headings)
+
+// Obter estatísticas
+const stats = HeadingExtractor.getStatistics(headings)
+```
+
+**Funcionalidades:**
+- ✅ Extração automática de headings (h1-h6)
+- ✅ Geração de IDs únicos com normalização
+- ✅ Validação de headings
+- ✅ Filtragem por nível
+- ✅ Criação de hierarquia
+- ✅ Estatísticas detalhadas
+- ✅ Normalização de níveis
+- ✅ Validação de estrutura hierárquica
 
 ## 📝 Adicionando Posts
 
