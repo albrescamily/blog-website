@@ -159,12 +159,19 @@ export class Header {
     const languageBtn = document.createElement('button')
     languageBtn.className = 'p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center gap-2'
     languageBtn.innerHTML = `🌐 ${this.currentLanguage.toUpperCase()}`
-    languageBtn.onclick = () => this.toggleLanguageDropdown()
+    languageBtn.onclick = (e) => this.toggleLanguageDropdown(e, languageDropdown)
     
     const dropdownMenu = this.renderLanguageMenu(t)
     
     languageDropdown.appendChild(languageBtn)
     languageDropdown.appendChild(dropdownMenu)
+    
+    // Fecha dropdown ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (!languageDropdown.contains(e.target)) {
+        dropdownMenu.classList.remove('show')
+      }
+    })
     
     return languageDropdown
   }
@@ -174,7 +181,7 @@ export class Header {
    */
   renderLanguageMenu(t) {
     const dropdownMenu = document.createElement('div')
-    dropdownMenu.className = 'dropdown-menu absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-2 min-w-[120px] hidden z-50'
+    dropdownMenu.className = 'dropdown-menu absolute right-0 top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-2 min-w-[120px] z-50'
     
     const languages = [
       { code: 'pt-BR', name: t('portuguese') },
@@ -184,9 +191,13 @@ export class Header {
     
     languages.forEach(lang => {
       const item = document.createElement('button')
-      item.className = `w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 ${this.currentLanguage === lang.code ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300' : ''}`
+      item.className = `dropdown-item ${this.currentLanguage === lang.code ? 'active' : ''}`
       item.textContent = lang.name
-      item.onclick = () => this.dispatchLanguageEvent(lang.code)
+      item.onclick = (e) => {
+        e.stopPropagation()
+        this.dispatchLanguageEvent(lang.code)
+        dropdownMenu.classList.remove('show')
+      }
       dropdownMenu.appendChild(item)
     })
     
@@ -196,11 +207,19 @@ export class Header {
   /**
    * Alterna a visibilidade do dropdown de idioma
    */
-  toggleLanguageDropdown() {
-    const dropdown = document.querySelector('.dropdown-menu')
+  toggleLanguageDropdown(e, dropdownContainer) {
+    e.stopPropagation()
+    const dropdown = dropdownContainer.querySelector('.dropdown-menu')
     if (dropdown) {
-      dropdown.classList.toggle('hidden')
+      dropdown.classList.toggle('show')
     }
+    
+    // Fecha outros dropdowns
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+      if (menu !== dropdown) {
+        menu.classList.remove('show')
+      }
+    })
   }
 
   /**

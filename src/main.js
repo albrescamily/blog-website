@@ -338,11 +338,11 @@ class BlogApp {
       this.render()
       return
     }
-
+    
     // Container principal minimalista e centralizado
     const content = document.createElement('div')
     content.className = 'min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-200'
-
+    
     // Botão de voltar para posts do blog
     const backBtn = document.createElement('button')
     backBtn.className = 'btn-secondary mb-8 self-start'
@@ -361,24 +361,24 @@ class BlogApp {
     title.className = 'text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-2 text-center'
     title.textContent = post.title
     wrapper.appendChild(title)
-
+    
     // Data em itálico
     const date = document.createElement('div')
     date.className = 'text-lg text-gray-500 dark:text-gray-400 italic mb-8 text-center'
     date.textContent = post.date
     wrapper.appendChild(date)
-
+    
     // Categorias e tags
     const categories = this.renderPostCategories(post)
     categories.className += ' justify-center mb-8'
     wrapper.appendChild(categories)
-
+    
     // Conteúdo do post
     const postContent = document.createElement('div')
     postContent.className = 'prose prose-lg max-w-none text-left w-full'
     postContent.innerHTML = DOMPurify.sanitize(marked.parse(post.content))
     wrapper.appendChild(postContent)
-
+    
     content.appendChild(wrapper)
     container.appendChild(content)
   }
@@ -391,7 +391,7 @@ class BlogApp {
     section.className = 'mb-8'
     
     const searchContainer = document.createElement('div')
-    searchContainer.className = 'max-w-md mx-auto'
+    searchContainer.className = 'max-w-md mx-auto relative'
     
     const searchInput = document.createElement('input')
     searchInput.type = 'text'
@@ -399,11 +399,74 @@ class BlogApp {
     searchInput.value = this.searchTerm
     searchInput.className = 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-200'
     
+    // Sugestões
+    const suggestionsBox = document.createElement('div')
+    suggestionsBox.className = 'absolute left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto hidden'
+    
+    let suggestions = []
+    let lastInputValue = searchInput.value
+    
+    // Atualiza sugestões enquanto digita
     searchInput.addEventListener('input', (e) => {
-      this.setSearchTerm(e.target.value)
+      const value = e.target.value
+      lastInputValue = value
+      if (value.trim() === '') {
+        suggestionsBox.innerHTML = ''
+        suggestionsBox.classList.add('hidden')
+        return
+      }
+      // Busca sugestões (máx 5)
+      suggestions = this.postService.searchPosts(value).slice(0, 5)
+      if (suggestions.length === 0) {
+        suggestionsBox.innerHTML = `<div class='px-4 py-2 text-gray-400'>Nenhum resultado</div>`
+        suggestionsBox.classList.remove('hidden')
+        return
+      }
+      suggestionsBox.innerHTML = ''
+      suggestions.forEach(post => {
+        const item = document.createElement('div')
+        item.className = 'px-4 py-2 cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-900 text-left text-gray-900 dark:text-white rounded'
+        item.textContent = post.title
+        item.onclick = () => {
+          searchInput.value = post.title
+          lastInputValue = post.title
+          suggestionsBox.classList.add('hidden')
+          searchInput.focus()
+        }
+        suggestionsBox.appendChild(item)
+      })
+      suggestionsBox.classList.remove('hidden')
     })
     
+    // Esconde sugestões ao perder foco
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => suggestionsBox.classList.add('hidden'), 150)
+    })
+    searchInput.addEventListener('focus', () => {
+      if (suggestionsBox.innerHTML && lastInputValue.trim() !== '') {
+        suggestionsBox.classList.remove('hidden')
+      }
+    })
+    
+    // Busca ao pressionar Enter
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        this.setSearchTerm(searchInput.value)
+      }
+    })
+    
+    // Botão de busca
+    const searchBtn = document.createElement('button')
+    searchBtn.type = 'button'
+    searchBtn.className = 'absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-lg bg-purple-600 text-white font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200'
+    searchBtn.textContent = 'Buscar'
+    searchBtn.onclick = () => {
+      this.setSearchTerm(searchInput.value)
+    }
+    
     searchContainer.appendChild(searchInput)
+    searchContainer.appendChild(searchBtn)
+    searchContainer.appendChild(suggestionsBox)
     section.appendChild(searchContainer)
     
     return section
@@ -481,7 +544,7 @@ class BlogApp {
       const img = document.createElement('img')
       img.src = post.image
       img.alt = post.title
-      img.className = 'object-cover w-full h-full group-hover:scale-105 transition-transform duration-300'
+      img.className = 'object-cover w-full h-full'
       imageContainer.appendChild(img)
     } else {
       const placeholder = document.createElement('span')
