@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface de Grafos - Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#EF4444',
+                        accent: '#10B981'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .graph-container {
+            min-height: 800px;
+            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+        }
+        
+        .node circle {
+            transition: all 0.3s ease;
+        }
+        
+        .node:hover circle {
+            stroke-width: 3;
+            stroke: #1f2937;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-gray-900">Interface de Grafos</h1>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                        Visualização de Relacionamentos
+                    </span>
+                </div>
+                <nav class="flex space-x-4">
+                    <a href="index.html" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                        Voltar ao Blog
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Description -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-3">Sobre esta Visualização</h2>
+            <p class="text-gray-600 mb-4">
+                Esta interface mostra os relacionamentos entre posts, categorias e tags do blog através de um grafo interativo. 
+                Você pode explorar as conexões, filtrar por tipo de elemento e ajustar a visualização.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-900 mb-2">Posts</h3>
+                    <p class="text-blue-700 text-sm">Representados por círculos azuis, mostram os artigos do blog</p>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-red-900 mb-2">Categorias</h3>
+                    <p class="text-red-700 text-sm">Representadas por círculos vermelhos, agrupam posts por tema</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-green-900 mb-2">Tags</h3>
+                    <p class="text-green-700 text-sm">Representadas por círculos verdes, marcam características específicas</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div id="graph-controls" class="mb-6">
+            <!-- Controls will be inserted here by JavaScript -->
+        </div>
+
+        <!-- Graph and Info Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Graph Container -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-900">Grafo de Relacionamentos</h3>
+                        <div class="text-sm text-gray-500">
+                            <span id="node-count">0</span> nós • <span id="link-count">0</span> conexões
+                        </div>
+                    </div>
+                    <div id="graph-container" class="graph-container rounded-lg overflow-hidden">
+                        <!-- Graph will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Node Info -->
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">Informações do Nó</h3>
+                    <div id="node-info" class="text-sm text-gray-600">
+                        Clique em um nó para ver suas informações
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">Legenda</h3>
+                    <div class="space-y-2">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #3B82F6;"></div>
+                            <span class="text-sm text-gray-700">Posts</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #EF4444;"></div>
+                            <span class="text-sm text-gray-700">Categorias</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #10B981;"></div>
+                            <span class="text-sm text-gray-700">Tags</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <h4 class="font-semibold text-gray-900 mb-2">Conexões</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-0.5 bg-red-500"></div>
+                                <span class="text-sm text-gray-700">Post → Categoria</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-0.5 bg-green-500"></div>
+                                <span class="text-sm text-gray-700">Post → Tag</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-lg font-bold text-gray-900 mb-3">Estatísticas</h3>
+                    <div id="statistics" class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Total de Posts:</span>
+                            <span id="post-count" class="text-sm font-semibold">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Total de Categorias:</span>
+                            <span id="category-count" class="text-sm font-semibold">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Total de Tags:</span>
+                            <span id="tag-count" class="text-sm font-semibold">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Conexões:</span>
+                            <span id="connection-count" class="text-sm font-semibold">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h3 class="text-lg font-bold text-blue-900 mb-2">Como Usar</h3>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Arraste os nós para reorganizar</li>
+                        <li>• Use o scroll para zoom</li>
+                        <li>• Passe o mouse para destacar conexões</li>
+                        <li>• Clique para ver detalhes</li>
+                        <li>• Use os controles para filtrar</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Statistics -->
+        <div class="mt-8">
+            <div id="graph-stats">
+                <!-- Detailed statistics will be inserted here -->
+            </div>
+        </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center text-gray-600">
+                <p>&copy; 2024 Blog Website. Interface de Grafos criada com D3.js</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { GraphPage } from './src/components/GraphPage.js'
+        import { GraphStats } from './src/components/GraphStats.js'
+
+        // Initialize graph when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            const graphPage = new GraphPage()
+            await graphPage.init()
+            
+            // Initialize detailed statistics
+            const graphStats = new GraphStats()
+            await graphStats.init()
+            
+            // Update statistics
+            updateStatistics()
+            
+            // Store reference for cleanup
+            window.graphPage = graphPage
+            window.graphStats = graphStats
+        })
+
+        function updateStatistics() {
+            // This will be called after the graph is initialized
+            setTimeout(() => {
+                const postService = window.graphPage?.postService
+                if (postService) {
+                    const posts = postService.getAllPosts()
+                    const categories = postService.getCategories()
+                    const tags = postService.getTags()
+                    const links = window.graphPage?.graphData?.links || []
+                    
+                    document.getElementById('post-count').textContent = posts.length
+                    document.getElementById('category-count').textContent = categories.length
+                    document.getElementById('tag-count').textContent = tags.length
+                    document.getElementById('connection-count').textContent = links.length
+                    document.getElementById('node-count').textContent = posts.length + categories.length + tags.length
+                    document.getElementById('link-count').textContent = links.length
+                }
+            }, 1000)
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (window.graphPage) {
+                window.graphPage.destroy()
+            }
+        })
+    </script>
+</body>
+</html> 

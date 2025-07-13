@@ -65,9 +65,11 @@ export class Header {
 
     const linkHome = this.createNavLink(t('home'), 'home', t)
     const linkBlog = this.createNavLink(t('blogPosts'), 'list', t)
+    const linkGraph = this.createGraphLink(t)
 
     nav.appendChild(linkHome)
     nav.appendChild(linkBlog)
+    nav.appendChild(linkGraph)
     
     return nav
   }
@@ -85,6 +87,19 @@ export class Header {
       e.preventDefault()
       this.dispatchNavigationEvent(view)
     }
+    
+    return link
+  }
+
+  /**
+   * Cria um link para a página de grafos
+   */
+  createGraphLink(t) {
+    const link = document.createElement('a')
+    link.href = 'graph.html'
+    link.textContent = t('graphs')
+    link.className = 'text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-200 font-medium'
+    link.target = '_blank'
     
     return link
   }

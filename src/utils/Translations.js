@@ -38,7 +38,8 @@ export class Translations {
         category: 'Categoria',
         tag: 'Tag',
         tableOfContents: 'Índice',
-        onThisPage: 'Nesta página'
+        onThisPage: 'Nesta página',
+        graphs: 'Grafos'
       },
       'en': {
         home: 'Home',
@@ -72,7 +73,8 @@ export class Translations {
         category: 'Category',
         tag: 'Tag',
         tableOfContents: 'Table of Contents',
-        onThisPage: 'On this page'
+        onThisPage: 'On this page',
+        graphs: 'Graphs'
       }
     }
     
