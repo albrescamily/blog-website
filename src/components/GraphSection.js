@@ -7,8 +7,8 @@ export class GraphSection {
     this.graphData = null
     this.simulation = null
     this.svg = null
-    this.width = 1200
-    this.height = 600
+    this.width = 1400
+    this.height = 700
     this.nodeRadius = 8
     this.linkDistance = 120
   }
@@ -112,14 +112,14 @@ export class GraphSection {
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <!-- Grafo -->
           <div class="lg:col-span-3">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 h-[700px] relative overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 h-[800px] relative overflow-hidden">
               <div class="flex justify-between items-center mb-3">
                 <h3 class="text-lg font-bold text-gray-900 dark:text-white">Grafo de Relacionamentos</h3>
                 <div class="text-sm text-gray-500 dark:text-gray-400">
                   <span id="section-node-count">0</span> nós • <span id="section-link-count">0</span> conexões
                 </div>
               </div>
-              <div id="section-graph-container" class="w-full h-[620px] bg-gray-50 dark:bg-gray-900 rounded-lg relative">
+              <div id="section-graph-container" class="w-full h-[720px] bg-gray-50 dark:bg-gray-900 rounded-lg relative">
                 <!-- Loading -->
                 <div id="section-graph-loading" class="absolute inset-0 bg-white dark:bg-gray-900 bg-opacity-90 flex items-center justify-center">
                   <div class="text-center">
@@ -127,6 +127,8 @@ export class GraphSection {
                     <p class="text-sm text-gray-600 dark:text-gray-400">Carregando...</p>
                   </div>
                 </div>
+
+
               </div>
             </div>
           </div>
@@ -156,13 +158,7 @@ export class GraphSection {
               </div>
             </div>
 
-            <!-- Informações -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-lg">
-              <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Informações</h3>
-              <div id="section-node-info" class="text-sm text-gray-600 dark:text-gray-400">
-                Clique em um nó para ver detalhes
-              </div>
-            </div>
+
 
             <!-- Estatísticas -->
             <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-lg">
@@ -199,8 +195,16 @@ export class GraphSection {
     const container = document.getElementById('section-graph-container')
     if (!container) return
 
+    // Salvar o card de informações antes de limpar
+    const infoCard = container.querySelector('#section-node-info-card')
+    
     // Limpar container
     container.innerHTML = ''
+    
+    // Recriar o card de informações se existia
+    if (infoCard) {
+      container.appendChild(infoCard)
+    }
 
     // Obter dimensões do container
     const containerRect = container.getBoundingClientRect()
@@ -214,6 +218,26 @@ export class GraphSection {
       .attr('height', '100%')
       .attr('viewBox', `0 0 ${containerWidth} ${containerHeight}`)
       .style('background', 'transparent')
+      .style('position', 'relative')
+      .style('z-index', '10')
+
+    // Recriar o card de informações após o SVG
+    const infoCardHTML = `
+      <div id="section-node-info-card" class="absolute top-4 left-4 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-4 shadow-xl border border-gray-200/50 dark:border-gray-700/50 max-w-sm z-50 opacity-0 transition-all duration-300 ease-out pointer-events-none transform scale-95">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-semibold text-gray-900 dark:text-white text-sm">Informações do Post</h4>
+          <button id="section-close-info" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="section-node-info-content" class="text-xs text-gray-600 dark:text-gray-400">
+          Clique em um nó para ver detalhes
+        </div>
+      </div>
+    `
+    container.insertAdjacentHTML('beforeend', infoCardHTML)
 
     // Criar grupo para zoom
     const g = this.svg.append('g')
@@ -366,17 +390,31 @@ export class GraphSection {
   }
 
   handleNodeClick(node) {
-    const infoContainer = document.getElementById('section-node-info')
-    if (infoContainer) {
-      let info = `<div class="font-medium text-gray-900 dark:text-white mb-2">${node.label}</div>`
+    const infoCard = document.getElementById('section-node-info-card')
+    const infoContent = document.getElementById('section-node-info-content')
+    
+    if (infoCard && infoContent) {
+      let info = `<div class="font-semibold text-gray-900 dark:text-white mb-3 text-sm">${node.label}</div>`
       
       // Informações básicas do post
       info += `
-        <div class="space-y-1 text-xs">
-          <div><span class="font-medium">Autor:</span> ${node.data.author}</div>
-          <div><span class="font-medium">Data:</span> ${node.data.date}</div>
-          <div><span class="font-medium">Categorias:</span> ${node.data.categories?.join(', ') || 'Nenhuma'}</div>
-          <div><span class="font-medium">Tags:</span> ${node.data.tags?.join(', ') || 'Nenhuma'}</div>
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between">
+            <span class="font-medium text-gray-500 dark:text-gray-400">Autor:</span>
+            <span class="text-gray-900 dark:text-white">${node.data.author}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium text-gray-500 dark:text-gray-400">Data:</span>
+            <span class="text-gray-900 dark:text-white">${node.data.date}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium text-gray-500 dark:text-gray-400">Categorias:</span>
+            <span class="text-gray-900 dark:text-white">${node.data.categories?.join(', ') || 'Nenhuma'}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-medium text-gray-500 dark:text-gray-400">Tags:</span>
+            <span class="text-gray-900 dark:text-white">${node.data.tags?.join(', ') || 'Nenhuma'}</span>
+          </div>
         </div>
       `
 
@@ -386,21 +424,32 @@ export class GraphSection {
       )
 
       if (connections.length > 0) {
-        info += `<div class="mt-2 text-xs"><span class="font-medium">Conexões:</span> ${connections.length}</div>`
+        info += `<div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <div class="text-xs font-medium text-gray-900 dark:text-white mb-2">Conexões: ${connections.length}</div>`
         
         // Agrupar conexões por tipo
         const categoryConnections = connections.filter(c => c.type === 'category' || c.type === 'both')
         const tagConnections = connections.filter(c => c.type === 'tag' || c.type === 'both')
         
         if (categoryConnections.length > 0) {
-          info += `<div class="text-xs text-red-600">• ${categoryConnections.length} por categoria</div>`
+          info += `<div class="text-xs text-red-600 dark:text-red-400">• ${categoryConnections.length} por categoria</div>`
         }
         if (tagConnections.length > 0) {
-          info += `<div class="text-xs text-green-600">• ${tagConnections.length} por tag</div>`
+          info += `<div class="text-xs text-green-600 dark:text-green-400">• ${tagConnections.length} por tag</div>`
         }
+        info += `</div>`
       }
       
-      infoContainer.innerHTML = info
+      infoContent.innerHTML = info
+      
+      // Mostrar o card com animação
+      infoCard.style.opacity = '1'
+      infoCard.style.pointerEvents = 'auto'
+      infoCard.style.transform = 'scale(1)'
+      
+      // Adicionar classe para animação
+      infoCard.classList.remove('scale-95')
+      infoCard.classList.add('scale-100')
     }
   }
 
@@ -447,8 +496,6 @@ export class GraphSection {
   }
 
   setupControls() {
-    // Controles removidos - mantendo método vazio para compatibilidade
-    
     // Listener para mudanças de tema
     this.themeObserver = new MutationObserver(() => {
       this.updateLabelColors()
@@ -458,6 +505,39 @@ export class GraphSection {
       attributes: true,
       attributeFilter: ['class']
     })
+
+    // Botão para fechar o card de informações
+    const closeButton = document.getElementById('section-close-info')
+    if (closeButton) {
+      closeButton.addEventListener('click', (e) => {
+        e.stopPropagation()
+        this.hideInfoCard()
+      })
+    }
+
+    // Fechar card ao clicar fora dele
+    const graphContainer = document.getElementById('section-graph-container')
+    if (graphContainer) {
+      graphContainer.addEventListener('click', (e) => {
+        const infoCard = document.getElementById('section-node-info-card')
+        if (infoCard && !infoCard.contains(e.target) && e.target.closest('.node') === null) {
+          this.hideInfoCard()
+        }
+      })
+    }
+  }
+
+  hideInfoCard() {
+    const infoCard = document.getElementById('section-node-info-card')
+    if (infoCard) {
+      infoCard.style.opacity = '0'
+      infoCard.style.pointerEvents = 'none'
+      infoCard.style.transform = 'scale(0.95)'
+      
+      // Remover classe de animação
+      infoCard.classList.remove('scale-100')
+      infoCard.classList.add('scale-95')
+    }
   }
 
   updateLabelColors() {
