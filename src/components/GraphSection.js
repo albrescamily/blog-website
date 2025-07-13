@@ -7,10 +7,10 @@ export class GraphSection {
     this.graphData = null
     this.simulation = null
     this.svg = null
-    this.width = 600
-    this.height = 400
-    this.nodeRadius = 6
-    this.linkDistance = 80
+    this.width = 700
+    this.height = 500
+    this.nodeRadius = 7
+    this.linkDistance = 90
     this.currentZoom = 1
     this.zoomTransform = d3.zoomIdentity
     this.zoomBehavior = null // Referência para o comportamento de zoom
@@ -108,14 +108,14 @@ export class GraphSection {
         <div class="w-full">
           <!-- Grafo Compacto -->
           <div class="w-full">
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-3 h-[450px] relative overflow-hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-3 h-[550px] relative overflow-hidden">
               <div class="flex justify-between items-center mb-2">
                 <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Grafo de Relacionamentos</h3>
                 <div class="text-xs text-gray-500 dark:text-gray-400">
                   <span id="section-node-count">0</span> nós • <span id="section-link-count">0</span> conexões
                 </div>
               </div>
-              <div id="section-graph-container" class="w-full h-[380px] bg-gray-50 dark:bg-gray-900 rounded-lg relative"></div>
+              <div id="section-graph-container" class="w-full h-[480px] bg-gray-50 dark:bg-gray-900 rounded-lg relative"></div>
             </div>
             <!-- Bloco discreto abaixo do grafo -->
             <div class="mt-2 p-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded border border-gray-200/30 dark:border-gray-700/30">
@@ -223,16 +223,16 @@ export class GraphSection {
         </div>
       </div>
       <!-- Card de Informações Flutuante -->
-      <div id="section-node-info-card" class="absolute top-2 left-2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-lg p-3 shadow-xl border border-gray-200/50 dark:border-gray-700/50 max-w-xs z-50 opacity-0 transition-all duration-300 ease-out pointer-events-none transform scale-95">
-        <div class="flex items-center justify-between mb-2">
-          <h4 class="font-semibold text-gray-900 dark:text-white text-xs">Informações do Post</h4>
-          <button id="section-close-info" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div id="section-node-info-card" class="absolute top-4 left-4 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-lg p-4 shadow-xl border border-gray-200/50 dark:border-gray-700/50 max-w-64 z-50 opacity-0 transition-all duration-300 ease-out pointer-events-none transform scale-95">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="font-semibold text-gray-900 dark:text-white text-sm">Informações do Post</h4>
+          <button id="section-close-info" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
-        <div id="section-node-info-content" class="text-xs text-gray-600 dark:text-gray-400">
+        <div id="section-node-info-content" class="text-sm text-gray-600 dark:text-gray-400">
           Clique em um nó para ver detalhes
         </div>
       </div>
@@ -397,14 +397,12 @@ export class GraphSection {
     
     if (infoCard && infoContent) {
       let info = `
-        <div class="mb-4">
-          <h5 class="text-lg font-bold text-gray-900 dark:text-white mb-2">${node.label}</h5>
-          <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+        <div class="mb-3">
+          <h5 class="text-base font-bold text-gray-900 dark:text-white mb-2">${node.label}</h5>
+          <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            <span>${node.data.author}</span>
-            <span>•</span>
             <span>${node.data.date}</span>
           </div>
         </div>
@@ -413,11 +411,11 @@ export class GraphSection {
       // Categorias
       if (node.data.categories && node.data.categories.length > 0) {
         info += `
-          <div class="mb-4">
+          <div class="mb-3">
             <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Categorias</div>
-            <div class="flex flex-wrap gap-1">
+            <div class="flex flex-wrap gap-1.5">
               ${node.data.categories.map(cat => `
-                <span class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded-lg font-medium">
+                <span class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded-md font-medium">
                   ${cat}
                 </span>
               `).join('')}
@@ -429,11 +427,11 @@ export class GraphSection {
       // Tags
       if (node.data.tags && node.data.tags.length > 0) {
         info += `
-          <div class="mb-4">
+          <div class="mb-3">
             <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Tags</div>
-            <div class="flex flex-wrap gap-1">
+            <div class="flex flex-wrap gap-1.5">
               ${node.data.tags.map(tag => `
-                <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs rounded-lg font-medium">
+                <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs rounded-md font-medium">
                   ${tag}
                 </span>
               `).join('')}
@@ -449,8 +447,8 @@ export class GraphSection {
 
       if (connections.length > 0) {
         info += `
-          <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
-            <div class="flex items-center gap-2 mb-3">
+          <div class="pt-3 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-2 mb-2">
               <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
               </svg>
