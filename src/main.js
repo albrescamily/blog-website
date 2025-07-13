@@ -211,6 +211,7 @@ class BlogApp {
     this.filterCategories = []
     this.filterTags = []
     this.searchTerm = ''
+    this.render()
   }
 
   /**
@@ -313,18 +314,7 @@ class BlogApp {
     // Título
     const title = document.createElement('h1')
     title.className = 'text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-8 text-center'
-    
-    if (this.filterCategories.length > 0 && this.filterTags.length > 0) {
-      title.textContent = `${this.translations.t('categories')}: ${this.filterCategories.join(', ')} + ${this.translations.t('tags')}: ${this.filterTags.join(', ')}`
-    } else if (this.filterCategories.length > 0) {
-      title.textContent = `${this.translations.t('categories')}: ${this.filterCategories.join(', ')}`
-    } else if (this.filterTags.length > 0) {
-      title.textContent = `${this.translations.t('tags')}: ${this.filterTags.join(', ')}`
-    } else if (this.searchTerm) {
-      title.textContent = `${this.translations.t('search')}: "${this.searchTerm}"`
-    } else {
-      title.textContent = this.translations.t('blogPosts')
-    }
+    title.textContent = this.translations.t('blogPosts')
     
     main.appendChild(title)
     
@@ -713,6 +703,22 @@ class BlogApp {
     const title = document.createElement('h3')
     title.className = 'text-xl font-semibold text-gray-900 dark:text-white mb-6'
     title.textContent = this.translations.t('categories')
+    
+    // Botão Clear All (só aparece se há categorias selecionadas)
+    if (this.filterCategories.length > 0) {
+      const clearAllWrapper = document.createElement('div')
+      clearAllWrapper.className = 'flex justify-end mb-3'
+      
+      const clearAllBtn = document.createElement('button')
+      clearAllBtn.className = 'w-fit px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors duration-200'
+      clearAllBtn.textContent = this.translations.t('clearAll')
+      clearAllBtn.onclick = () => {
+        this.clearFilters()
+      }
+      
+      clearAllWrapper.appendChild(clearAllBtn)
+      section.appendChild(clearAllWrapper)
+    }
     
     const list = document.createElement('div')
     list.className = 'space-y-3'
