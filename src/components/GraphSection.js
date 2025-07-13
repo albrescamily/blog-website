@@ -251,7 +251,7 @@ export class GraphSection {
 
     // Adicionar zoom
     this.zoomBehavior = d3.zoom()
-      .scaleExtent([0.2, 4])
+      .scaleExtent([0.2, 2])
       .on('zoom', (event) => {
         this.zoomTransform = event.transform
         this.currentZoom = event.transform.k
@@ -593,11 +593,8 @@ export class GraphSection {
     const zoomLevel = document.getElementById('section-zoom-level')
     if (zoomLevel) {
       // Garantir que o zoom seja um número válido
-      const zoomValue = Math.max(0.1, Math.min(4, this.currentZoom || 1))
+      const zoomValue = Math.max(0.1, Math.min(2, this.currentZoom || 1))
       zoomLevel.textContent = `${Math.round(zoomValue * 100)}%`
-      
-      // Debug: log para verificar se está sendo chamado
-      console.log('Zoom atualizado:', zoomValue, 'Display:', zoomLevel.textContent)
     }
   }
 
@@ -618,8 +615,14 @@ export class GraphSection {
   zoomIn() {
     if (this.svg && this.zoomBehavior) {
       const currentTransform = d3.zoomTransform(this.svg.node())
-      const newScale = Math.min(currentTransform.k * 1.5, 4)
-      const newTransform = currentTransform.scale(newScale)
+      const newScale = Math.min(currentTransform.k * 1.5, 2)
+      
+      console.log('Zoom In - Current:', currentTransform.k, 'New:', newScale)
+      
+      // Criar nova transformação mantendo a posição atual
+      const newTransform = d3.zoomIdentity
+        .translate(currentTransform.x, currentTransform.y)
+        .scale(newScale)
       
       this.svg.transition().duration(300).call(
         this.zoomBehavior.transform,
@@ -637,7 +640,13 @@ export class GraphSection {
     if (this.svg && this.zoomBehavior) {
       const currentTransform = d3.zoomTransform(this.svg.node())
       const newScale = Math.max(currentTransform.k / 1.5, 0.2)
-      const newTransform = currentTransform.scale(newScale)
+      
+      console.log('Zoom Out - Current:', currentTransform.k, 'New:', newScale)
+      
+      // Criar nova transformação mantendo a posição atual
+      const newTransform = d3.zoomIdentity
+        .translate(currentTransform.x, currentTransform.y)
+        .scale(newScale)
       
       this.svg.transition().duration(300).call(
         this.zoomBehavior.transform,
@@ -653,13 +662,16 @@ export class GraphSection {
 
   resetView() {
     if (this.svg && this.zoomBehavior) {
+      // Reset para zoom 100% e posição central
+      const resetTransform = d3.zoomIdentity
+      
       this.svg.transition().duration(750).call(
         this.zoomBehavior.transform,
-        d3.zoomIdentity
+        resetTransform
       )
       
       // Atualizar estado interno
-      this.zoomTransform = d3.zoomIdentity
+      this.zoomTransform = resetTransform
       this.currentZoom = 1
       this.updateZoomIndicator()
     }
@@ -688,22 +700,26 @@ export class GraphSection {
 
       if (minX === Infinity) return
 
-      // Adicionar padding
-      const padding = 50
-      const graphWidth = maxX - minX + padding * 2
-      const graphHeight = maxY - minY + padding * 2
+      // Obter zoom atual
+      const currentTransform = d3.zoomTransform(this.svg.node())
+      const currentZoom = currentTransform.k
 
-      // Calcular escala
-      const scaleX = containerWidth / graphWidth
-      const scaleY = containerHeight / graphHeight
-      const scale = Math.min(scaleX, scaleY, 1) // Não zoom in além de 100%
+      // Calcular centro do grafo
+      const graphCenterX = (minX + maxX) / 2
+      const graphCenterY = (minY + maxY) / 2
 
-      // Calcular translação
-      const translateX = containerWidth / 2 - (minX + maxX) / 2 * scale
-      const translateY = containerHeight / 2 - (minY + maxY) / 2 * scale
+      // Calcular centro do container
+      const containerCenterX = containerWidth / 2
+      const containerCenterY = containerHeight / 2
 
-      // Criar nova transformação
-      const newTransform = d3.zoomIdentity.translate(translateX, translateY).scale(scale)
+      // Calcular translação para centralizar o grafo mantendo o zoom atual
+      const translateX = containerCenterX - graphCenterX * currentZoom
+      const translateY = containerCenterY - graphCenterY * currentZoom
+
+      // Criar nova transformação mantendo o zoom atual
+      const newTransform = d3.zoomIdentity
+        .translate(translateX, translateY)
+        .scale(currentZoom)
 
       // Aplicar transformação
       this.svg.transition().duration(750).call(
@@ -711,9 +727,9 @@ export class GraphSection {
         newTransform
       )
       
-      // Atualizar estado interno
+      // Atualizar estado interno (mantendo o zoom atual)
       this.zoomTransform = newTransform
-      this.currentZoom = scale
+      this.currentZoom = currentZoom
       this.updateZoomIndicator()
     }
   }
