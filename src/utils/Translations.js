@@ -27,7 +27,6 @@ export class Translations {
         language: 'Idioma',
         portuguese: 'Português',
         english: 'English',
-        spanish: 'Español',
         search: 'Buscar',
         searchPlaceholder: 'Buscar posts...',
         clearFilters: 'Limpar filtros',
@@ -61,7 +60,6 @@ export class Translations {
         language: 'Language',
         portuguese: 'Português',
         english: 'English',
-        spanish: 'Español',
         search: 'Search',
         searchPlaceholder: 'Search posts...',
         clearFilters: 'Clear filters',
@@ -73,44 +71,12 @@ export class Translations {
         tag: 'Tag',
         tableOfContents: 'Table of Contents',
         onThisPage: 'On this page'
-      },
-      'es': {
-        home: 'Inicio',
-        blogPosts: 'Posts del Blog',
-        welcome: 'Bienvenido a Mi Blog Minimalista',
-        welcomeSubtitle: 'Aquí encuentras artículos, consejos e ideas sobre tecnología, programación y mucho más. Todos los posts están escritos en Markdown y gestionados directamente desde VSCode.',
-        viewAllPosts: 'Ver todos los posts',
-        postCollection: 'Colección de Posts',
-        categories: 'Categorías',
-        tags: 'Etiquetas',
-        readMore: 'Leer más',
-        back: 'Volver',
-        noPostsFound: 'No se encontraron posts.',
-        author: 'Autor',
-        allRightsReserved: 'Todos los derechos reservados.',
-        madeWith: 'Hecho con',
-        by: 'por',
-        darkMode: 'Modo oscuro',
-        lightMode: 'Modo claro',
-        language: 'Idioma',
-        portuguese: 'Português',
-        english: 'English',
-        spanish: 'Español',
-        search: 'Buscar',
-        searchPlaceholder: 'Buscar posts...',
-        clearFilters: 'Limpiar filtros',
-        relatedPosts: 'Posts relacionados',
-        sharePost: 'Compartir post',
-        readingTime: 'Tiempo de lectura',
-        publishedOn: 'Publicado el',
-        category: 'Categoría',
-        tag: 'Etiqueta',
-        tableOfContents: 'Índice',
-        onThisPage: 'En esta página'
       }
     }
     
-    this.currentLanguage = localStorage.getItem('language') || 'pt-BR'
+    const savedLanguage = localStorage.getItem('language') || 'pt-BR'
+    // Se o idioma salvo for espanhol (que foi removido), usar português como padrão
+    this.currentLanguage = savedLanguage === 'es' ? 'pt-BR' : savedLanguage
   }
 
   /**

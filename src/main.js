@@ -243,7 +243,7 @@ class BlogApp {
     
     // Adiciona espaçador para o header fixo
     const spacer = document.createElement('div')
-    spacer.className = 'h-16'
+    spacer.className = 'h-20'
     app.appendChild(spacer)
     
     // Renderiza o conteúdo principal
@@ -465,7 +465,7 @@ class BlogApp {
       suggestionsBox.innerHTML = ''
       suggestions.forEach(post => {
         const item = document.createElement('div')
-        item.className = 'px-4 py-2 cursor-pointer hover:bg-purple-100 dark:hover:bg-purple-900 text-left text-gray-900 dark:text-white rounded'
+        item.className = 'px-4 py-2 cursor-pointer hover:bg-cyan-100 dark:hover:bg-cyan-900 text-left text-gray-900 dark:text-white rounded'
         item.textContent = post.title
         item.onclick = () => {
           searchInput.value = post.title
@@ -498,7 +498,7 @@ class BlogApp {
     // Botão de busca
     const searchBtn = document.createElement('button')
     searchBtn.type = 'button'
-    searchBtn.className = 'absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-lg bg-purple-600 text-white font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-colors duration-200'
+    searchBtn.className = 'absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-lg bg-cyan-600 text-white font-semibold hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-colors duration-200'
     searchBtn.textContent = 'Buscar'
     searchBtn.onclick = () => {
       this.setSearchTerm(searchInput.value)
@@ -521,7 +521,7 @@ class BlogApp {
     
     const homeLink = document.createElement('a')
     homeLink.href = '#'
-    homeLink.className = 'hover:underline hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200'
+    homeLink.className = 'hover:underline hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-200'
     homeLink.textContent = this.translations.t('home')
     homeLink.onclick = e => {
       e.preventDefault()
@@ -544,7 +544,7 @@ class BlogApp {
       separator2.textContent = '/'
       
       const categorySpan = document.createElement('span')
-      categorySpan.className = 'text-purple-600 dark:text-purple-400'
+      categorySpan.className = 'text-cyan-600 dark:text-cyan-400'
       categorySpan.textContent = this.filterCategories.join(', ')
       
       nav.appendChild(separator2)
@@ -578,7 +578,7 @@ class BlogApp {
     
     // Imagem
     const imageContainer = document.createElement('div')
-    imageContainer.className = 'h-56 w-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center overflow-hidden rounded-t-2xl'
+    imageContainer.className = 'h-48 w-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center overflow-hidden rounded-t-2xl'
     
     if (post.image) {
       const img = document.createElement('img')
@@ -597,24 +597,24 @@ class BlogApp {
     
     // Conteúdo
     const content = document.createElement('div')
-    content.className = 'flex-1 flex flex-col p-8'
+    content.className = 'flex-1 flex flex-col p-6 h-full'
     
     const title = document.createElement('h2')
-    title.className = 'text-2xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-200 leading-tight'
+    title.className = 'text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors duration-200 leading-tight'
     title.textContent = post.title
     
     const meta = document.createElement('div')
     meta.className = 'flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-3'
-    meta.innerHTML = `<span>👤 ${post.author || this.translations.t('author')}</span><span>•</span><span>📅 ${post.date}</span>`
+    meta.innerHTML = `<span>${post.date}</span>`
     
     const categories = this.renderPostCardCategories(post)
     
     const excerpt = document.createElement('div')
-    excerpt.className = 'text-gray-600 dark:text-gray-300 text-base leading-relaxed text-truncate-3 mb-6'
+    excerpt.className = 'text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 flex-1 overflow-hidden'
     excerpt.innerHTML = DOMPurify.sanitize(marked.parse(post.content.split('\n').slice(0, 6).join(' ')))
     
     const readMore = document.createElement('button')
-    readMore.className = 'btn-primary mt-auto w-fit'
+    readMore.className = 'btn-primary w-fit text-sm px-4 py-2 mt-auto'
     readMore.textContent = this.translations.t('readMore')
     readMore.onclick = e => {
       e.stopPropagation()
@@ -741,7 +741,7 @@ class BlogApp {
       const isActive = this.filterCategories.includes(category.name)
       btn.className = `w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 hover:shadow-md ${
         isActive 
-          ? 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 shadow-md' 
+          ? 'bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300 shadow-md' 
           : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
       }`
       
@@ -755,7 +755,7 @@ class BlogApp {
       const count = document.createElement('span')
       count.className = `text-xs px-3 py-1 rounded-full font-semibold ${
         isActive 
-          ? 'bg-purple-200 dark:bg-purple-800 text-purple-800 dark:text-purple-200' 
+          ? 'bg-cyan-200 dark:bg-cyan-800 text-cyan-800 dark:text-cyan-200' 
           : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
       }`
       count.textContent = category.count
@@ -780,7 +780,7 @@ class BlogApp {
    */
   renderTableOfContents(post) {
     const section = document.createElement('div')
-    section.className = 'table-of-contents sticky top-8'
+    section.className = 'table-of-contents sticky top-20'
     
     const title = document.createElement('h3')
     title.textContent = this.translations.t('tableOfContents')

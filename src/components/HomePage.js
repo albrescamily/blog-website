@@ -40,7 +40,7 @@ export class HomePage {
     
     const blogLink = document.createElement('a')
     blogLink.href = '#'
-    blogLink.className = 'hover:underline hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200'
+    blogLink.className = 'hover:underline hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-200'
     blogLink.textContent = t('blogPosts')
     blogLink.onclick = e => {
       e.preventDefault()
@@ -113,12 +113,12 @@ export class HomePage {
     li.onclick = () => this.dispatchPostViewEvent(post.id)
     
     const title = document.createElement('h3')
-    title.className = 'text-lg font-semibold text-gray-900 dark:text-white mb-2 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200'
+    title.className = 'text-lg font-semibold text-gray-900 dark:text-white mb-2 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-200'
     title.textContent = post.title
     
     const meta = document.createElement('div')
     meta.className = 'flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-2'
-    meta.innerHTML = `<span>👤 ${post.author || t('author')}</span><span>•</span><span>📅 ${post.date}</span>`
+    meta.innerHTML = `<span>${post.date}</span>`
     
     const categories = document.createElement('div')
     categories.className = 'flex flex-wrap gap-2'

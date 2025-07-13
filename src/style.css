@@ -313,23 +313,23 @@
 
   /* Botões */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-gradient-to-r from-purple-600 to-purple-700 rounded-xl shadow-lg hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-gradient-to-r from-cyan-600 to-cyan-700 rounded-xl shadow-lg hover:from-cyan-700 hover:to-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition-colors duration-200;
   }
 
   .btn-primary:hover {
-    box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 10px 25px -5px rgba(8, 145, 178, 0.4);
   }
 
   .dark .btn-primary {
-    @apply from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700;
+    @apply from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700;
   }
 
   .dark .btn-primary:hover {
-    box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.4);
+    box-shadow: 0 10px 25px -5px rgba(34, 211, 238, 0.4);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-xl shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-xl shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition-colors duration-200;
   }
 
   .btn-secondary:hover {
@@ -346,19 +346,19 @@
 
   /* Tags */
   .btn-tag {
-    @apply inline-flex items-center px-3 py-1.5 text-sm font-medium text-purple-700 bg-purple-100 border border-purple-200 rounded-full hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1 transition-colors duration-200 cursor-pointer;
+    @apply inline-flex items-center px-3 py-1.5 text-sm font-medium text-cyan-700 bg-cyan-100 border border-cyan-200 rounded-full hover:bg-cyan-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 transition-colors duration-200 cursor-pointer;
   }
 
   .btn-tag:hover {
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+    box-shadow: 0 2px 8px rgba(8, 145, 178, 0.2);
   }
 
   .dark .btn-tag {
-    @apply text-purple-300 bg-purple-900/50 border-purple-700 hover:bg-purple-900;
+    @apply text-cyan-300 bg-cyan-900/50 border-cyan-700 hover:bg-cyan-900;
   }
 
   .dark .btn-tag:hover {
-    box-shadow: 0 2px 8px rgba(168, 85, 247, 0.3);
+    box-shadow: 0 2px 8px rgba(34, 211, 238, 0.3);
   }
 
   .btn-tag-blue {
@@ -379,7 +379,14 @@
 
   /* Cards */
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden transition-shadow duration-300 hover:shadow-xl cursor-pointer;
+    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden transition-shadow duration-300 hover:shadow-xl cursor-pointer min-h-[400px] flex flex-col;
+  }
+
+  .card .text-gray-600 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .card:hover {
@@ -412,7 +419,7 @@
 
   /* Navegação */
   .nav-link {
-    @apply text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200 font-medium;
+    @apply text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-200 font-medium;
   }
 
   .dark .nav-link {
@@ -420,15 +427,15 @@
   }
 
   .dark .nav-link:hover {
-    @apply text-purple-400;
+    @apply text-cyan-400;
   }
 
   .nav-link.active {
-    @apply text-purple-600 dark:text-purple-400 underline decoration-purple-600 dark:decoration-purple-400;
+    @apply text-cyan-600 dark:text-cyan-400 underline decoration-cyan-600 dark:decoration-cyan-400;
   }
 
   .dark .nav-link.active {
-    @apply text-purple-400 decoration-purple-400;
+    @apply text-cyan-400 decoration-cyan-400;
   }
 
   /* Dropdown */
@@ -449,7 +456,7 @@
   }
 
   .dropdown-item:hover {
-    @apply text-purple-600 dark:text-purple-400;
+    @apply text-cyan-600 dark:text-cyan-400;
   }
 
   .dark .dropdown-item {
@@ -457,15 +464,15 @@
   }
 
   .dark .dropdown-item:hover {
-    @apply text-purple-400;
+    @apply text-cyan-400;
   }
 
   .dropdown-item.active {
-    @apply bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300;
+    @apply bg-cyan-100 dark:bg-cyan-900 text-cyan-700 dark:text-cyan-300;
   }
 
   .dark .dropdown-item.active {
-    @apply bg-purple-900 text-purple-300;
+    @apply bg-cyan-900 text-cyan-300;
   }
 
   /* Toggle Switch */
@@ -474,7 +481,7 @@
   }
 
   .toggle-slider.active {
-    @apply bg-purple-600 dark:bg-purple-500;
+    @apply bg-cyan-600 dark:bg-cyan-500;
   }
 
   .toggle-thumb {
@@ -523,7 +530,7 @@
 
   .toggle-slider.active::before {
     content: '';
-    @apply absolute inset-0 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 opacity-0 transition-opacity duration-300;
+    @apply absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-600 opacity-0 transition-opacity duration-300;
   }
 
   .toggle-slider.active:hover::before {
@@ -567,15 +574,15 @@
 
   /* Gradientes */
   .bg-gradient-primary {
-    background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
   }
 
   .bg-gradient-secondary {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #0ea5e9 0%, #0891b2 100%);
   }
 
   .bg-gradient-radial {
-    background: radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(8, 145, 178, 0.1) 0%, transparent 70%);
   }
 
   /* Responsividade */
@@ -663,7 +670,7 @@
 
   .input-modern:focus {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
   }
 
   /* Melhorias para sidebar */
@@ -673,16 +680,16 @@
 
   /* Melhorias para grid */
   .posts-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
   }
 
   /* Melhorias para hero section */
   .hero-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
   }
 
   .dark .hero-gradient {
-    background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, #0e7490 0%, #0891b2 100%);
   }
 }
 
@@ -725,7 +732,7 @@
 
   /* Gradientes customizados */
   .bg-gradient-primary {
-    background: linear-gradient(to right, rgb(147 51 234), rgb(126 34 206));
+    background: linear-gradient(to right, rgb(8 145 178), rgb(14 116 144));
   }
 
   .bg-gradient-secondary {
@@ -733,7 +740,7 @@
   }
 
   .bg-gradient-radial {
-    background: radial-gradient(ellipse at center, rgb(147 51 234), rgb(126 34 206));
+    background: radial-gradient(ellipse at center, rgb(8 145 178), rgb(14 116 144));
   }
 }
 
@@ -771,24 +778,24 @@
 
 /* Tabela de Conteúdo */
 .table-of-contents {
-  @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6;
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6 z-40;
 }
 
 .table-of-contents h3 {
   @apply text-xl font-semibold text-gray-900 dark:text-white mb-6 border-b border-gray-200 dark:border-gray-700 pb-3;
 }
 
-.table-of-contents a {
-  @apply block text-sm text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200 py-1 border-l-2 border-transparent hover:border-purple-500 pl-3;
-}
+  .table-of-contents a {
+    @apply block text-sm text-gray-600 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-200 py-1 border-l-2 border-transparent hover:border-cyan-500 pl-3;
+  }
 
-.table-of-contents a:hover {
-  @apply bg-purple-50 dark:bg-purple-900/20;
-}
+  .table-of-contents a:hover {
+    @apply bg-cyan-50 dark:bg-cyan-900/20;
+  }
 
-.table-of-contents a.active {
-  @apply text-purple-600 dark:text-purple-400 border-purple-500 bg-purple-50 dark:bg-purple-900/20;
-}
+  .table-of-contents a.active {
+    @apply text-cyan-600 dark:text-cyan-400 border-cyan-500 bg-cyan-50 dark:bg-cyan-900/20;
+  }
 
 .table-of-contents .heading-h1 {
   @apply font-semibold text-base;
@@ -826,5 +833,5 @@ html {
 .prose h4[id],
 .prose h5[id],
 .prose h6[id] {
-  scroll-margin-top: 2rem;
+  scroll-margin-top: 6rem;
 }

@@ -51,8 +51,8 @@ export class Header {
    */
   renderLogo() {
     const logo = document.createElement('span')
-    logo.className = 'font-bold text-xl text-purple-600 dark:text-purple-400 tracking-tight select-none transition-colors duration-200'
-    logo.textContent = 'Camily Blog'
+    logo.className = 'font-bold text-xl text-cyan-600 dark:text-cyan-400 tracking-tight select-none transition-colors duration-200'
+    logo.textContent = 'Camily Albres'
     return logo
   }
 
@@ -79,7 +79,7 @@ export class Header {
     const link = document.createElement('a')
     link.href = '#'
     link.textContent = text
-    link.className = `text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-200 font-medium ${this.currentView === view ? 'underline decoration-purple-600 dark:decoration-purple-400' : ''}`
+    link.className = `text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-200 font-medium ${this.currentView === view ? 'underline decoration-cyan-600 dark:decoration-cyan-400' : ''}`
     
     link.onclick = e => { 
       e.preventDefault()
@@ -185,8 +185,7 @@ export class Header {
     
     const languages = [
       { code: 'pt-BR', name: t('portuguese') },
-      { code: 'en', name: t('english') },
-      { code: 'es', name: t('spanish') }
+      { code: 'en', name: t('english') }
     ]
     
     languages.forEach(lang => {
