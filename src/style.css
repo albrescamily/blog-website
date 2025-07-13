@@ -843,3 +843,85 @@ html {
 .prose h6[id] {
   scroll-margin-top: 6rem;
 }
+
+/* Estilos para a seção de grafos */
+#section-graph-container {
+  animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para os nós do grafo */
+.node circle {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.node:hover circle {
+  stroke-width: 3;
+  stroke: #1f2937;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.dark .node:hover circle {
+  stroke: #f3f4f6;
+}
+
+/* Estilos para os links do grafo */
+line {
+  transition: stroke-opacity 0.2s ease;
+}
+
+/* Estilos para o loading da seção */
+#section-graph-loading {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Estilos para controles da seção de grafos */
+#section-type-filter,
+#section-link-distance {
+  transition: all 0.2s ease;
+}
+
+#section-type-filter:focus,
+#section-link-distance:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #3b82f6;
+}
+
+/* Responsividade para a seção de grafos */
+@media (max-width: 1024px) {
+  #section-graph-container {
+    height: 350px !important;
+  }
+  
+  .lg\:grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .lg\:col-span-3,
+  .lg\:col-span-1 {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  #section-graph-container {
+    height: 300px !important;
+  }
+  
+  .text-3xl.md\:text-4xl {
+    font-size: 1.75rem;
+  }
+}

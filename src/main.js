@@ -11,6 +11,7 @@ import DOMPurify from 'dompurify'
 import { Header } from './components/Header.js'
 import { Footer } from './components/Footer.js'
 import { HomePage } from './components/HomePage.js'
+import { GraphSection } from './components/GraphSection.js'
 
 // Importações dos serviços
 import { PostService } from './services/PostService.js'
@@ -52,6 +53,7 @@ class BlogApp {
     // Inicialização dos componentes
     this.header = new Header()
     this.footer = new Footer()
+    this.graphSection = new GraphSection()
     
     // Estado da aplicação
     this.currentView = 'home'
@@ -91,6 +93,9 @@ class BlogApp {
     try {
       // Carrega os posts
       await this.postService.loadPosts()
+      
+      // Inicializa a seção de grafos
+      await this.graphSection.init()
       
       // Configura os event listeners
       this.setupEventListeners()
@@ -286,6 +291,10 @@ class BlogApp {
     const homePage = new HomePage(this.postService.getAllPosts())
     const content = homePage.render(this.translations.t.bind(this.translations))
     container.appendChild(content)
+    
+    // Adiciona a seção de grafos
+    const graphSection = this.graphSection.render()
+    container.appendChild(graphSection)
   }
 
   /**
