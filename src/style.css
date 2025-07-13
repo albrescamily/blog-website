@@ -349,6 +349,10 @@
     @apply inline-flex items-center px-3 py-1.5 text-sm font-medium text-cyan-700 bg-cyan-100 border border-cyan-200 rounded-full hover:bg-cyan-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 transition-colors duration-200 cursor-pointer;
   }
 
+  .btn-tag:not([onclick]) {
+    @apply cursor-default hover:bg-cyan-100;
+  }
+
   .btn-tag:hover {
     box-shadow: 0 2px 8px rgba(8, 145, 178, 0.2);
   }
@@ -363,6 +367,10 @@
 
   .btn-tag-blue {
     @apply inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-100 border border-blue-200 rounded-full hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors duration-200 cursor-pointer;
+  }
+
+  .btn-tag-blue:not([onclick]) {
+    @apply cursor-default hover:bg-blue-100;
   }
 
   .btn-tag-blue:hover {

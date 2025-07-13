@@ -614,10 +614,7 @@ class BlogApp {
         const btn = document.createElement('button')
         btn.className = 'btn-tag'
         btn.textContent = cat
-        btn.onclick = e => {
-          e.stopPropagation()
-          this.toggleCategoryFilter(cat)
-        }
+        // Removido onclick para não permitir interação na visualização do post
         container.appendChild(btn)
       })
     }
@@ -627,10 +624,7 @@ class BlogApp {
         const btn = document.createElement('button')
         btn.className = 'btn-tag-blue'
         btn.textContent = tag
-        btn.onclick = e => {
-          e.stopPropagation()
-          this.toggleTagFilter(tag)
-        }
+        // Removido onclick para não permitir interação na visualização do post
         container.appendChild(btn)
       })
     }
