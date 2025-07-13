@@ -10,10 +10,10 @@ export class HomePage {
 
   render(t) {
     const container = document.createElement('div')
-    container.className = 'min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200'
+    container.className = 'w-full flex flex-col items-center'
     
     const content = document.createElement('div')
-    content.className = 'max-w-3xl mx-auto py-16 px-4 flex flex-col items-center'
+    content.className = 'w-full max-w-lg flex flex-col items-center'
     
     const navigation = this.renderNavigation(t)
     const hero = this.renderHero(t)
@@ -29,7 +29,7 @@ export class HomePage {
 
   renderNavigation(t) {
     const nav = document.createElement('nav')
-    nav.className = 'w-full text-gray-500 dark:text-gray-400 text-sm mb-8 flex gap-2 items-center justify-center'
+    nav.className = 'w-full text-gray-500 dark:text-gray-400 text-sm mb-6 flex gap-2 items-center justify-center'
     
     const homeSpan = document.createElement('span')
     homeSpan.className = 'text-gray-900 dark:text-white font-medium'
@@ -56,19 +56,19 @@ export class HomePage {
 
   renderHero(t) {
     const hero = document.createElement('div')
-    hero.className = 'text-center mb-16'
+    hero.className = 'text-center mb-8'
     
     const title = document.createElement('h1')
-    title.className = 'text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight'
+    title.className = 'text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 leading-tight'
     title.textContent = t('welcome')
     
     const subtitle = document.createElement('p')
-    subtitle.className = 'text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-xl leading-relaxed mx-auto text-center'
+    subtitle.className = 'text-base text-gray-600 dark:text-gray-300 mb-6 max-w-lg leading-relaxed mx-auto text-center'
     subtitle.textContent = t('welcomeSubtitle')
     
     const ctaButton = document.createElement('a')
     ctaButton.href = '#'
-    ctaButton.className = 'btn-primary inline-block px-8 py-3 text-lg mb-16'
+    ctaButton.className = 'btn-primary inline-block px-6 py-2 text-base mb-8'
     ctaButton.textContent = t('viewAllPosts')
     ctaButton.onclick = e => {
       e.preventDefault()
@@ -87,7 +87,7 @@ export class HomePage {
     container.className = 'w-full max-w-2xl'
     
     const title = document.createElement('h2')
-    title.className = 'text-2xl text-gray-900 dark:text-white font-semibold mb-6'
+    title.className = 'text-2xl text-gray-900 dark:text-white font-semibold mb-4'
     title.textContent = t('postCollection')
     
     const postList = document.createElement('ul')
@@ -154,4 +154,4 @@ export class HomePage {
   dispatchCategoryFilterEvent(category) {
     window.dispatchEvent(new CustomEvent('categoryFilter', { detail: { category } }))
   }
-} 
+}

@@ -7,10 +7,10 @@ export class GraphSection {
     this.graphData = null
     this.simulation = null
     this.svg = null
-    this.width = 1400
-    this.height = 700
-    this.nodeRadius = 8
-    this.linkDistance = 120
+    this.width = 600
+    this.height = 400
+    this.nodeRadius = 6
+    this.linkDistance = 80
     this.currentZoom = 1
     this.zoomTransform = d3.zoomIdentity
     this.zoomBehavior = null // Referência para o comportamento de zoom
@@ -100,41 +100,41 @@ export class GraphSection {
 
     render() {
     const section = document.createElement('section')
-    section.className = 'py-8 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800'
+    section.className = 'w-full'
     
     section.innerHTML = `
-      <div class="max-w-7xl mx-auto px-6">
-        <!-- Container principal -->
-        <div class="flex justify-center">
-          <!-- Grafo Centralizado -->
-          <div class="w-full max-w-6xl">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 h-[800px] relative overflow-hidden">
-              <div class="flex justify-between items-center mb-3">
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Grafo de Relacionamentos</h3>
-                <div class="text-sm text-gray-500 dark:text-gray-400">
+      <div class="w-full">
+        <!-- Container compacto -->
+        <div class="w-full">
+          <!-- Grafo Compacto -->
+          <div class="w-full">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-3 h-[450px] relative overflow-hidden">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Grafo de Relacionamentos</h3>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
                   <span id="section-node-count">0</span> nós • <span id="section-link-count">0</span> conexões
                 </div>
               </div>
-              <div id="section-graph-container" class="w-full h-[720px] bg-gray-50 dark:bg-gray-900 rounded-lg relative"></div>
+              <div id="section-graph-container" class="w-full h-[380px] bg-gray-50 dark:bg-gray-900 rounded-lg relative"></div>
             </div>
             <!-- Bloco discreto abaixo do grafo -->
-            <div class="mt-3 p-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded border border-gray-200/30 dark:border-gray-700/30">
-              <div class="flex flex-col items-center gap-3">
+            <div class="mt-2 p-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded border border-gray-200/30 dark:border-gray-700/30">
+              <div class="flex flex-col items-center gap-2">
                 <!-- Legenda Centralizada -->
-                <div class="flex flex-wrap items-center justify-center gap-4 text-xs">
-                  <div class="flex items-center gap-1.5">
+                <div class="flex flex-wrap items-center justify-center gap-3 text-xs">
+                  <div class="flex items-center gap-1">
                     <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
                     <span class="text-gray-500 dark:text-gray-400">Posts</span>
                   </div>
-                  <div class="flex items-center gap-1.5">
+                  <div class="flex items-center gap-1">
                     <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
                     <span class="text-gray-500 dark:text-gray-400">Categoria</span>
                   </div>
-                  <div class="flex items-center gap-1.5">
+                  <div class="flex items-center gap-1">
                     <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
                     <span class="text-gray-500 dark:text-gray-400">Tag</span>
                   </div>
-                  <div class="flex items-center gap-1.5">
+                  <div class="flex items-center gap-1">
                     <span class="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
                     <span class="text-gray-500 dark:text-gray-400">Múltipla</span>
                   </div>
@@ -189,32 +189,32 @@ export class GraphSection {
 
     // INSERIR CONTROLES DE NAVEGAÇÃO VIA JS
     const controlsHTML = `
-      <div id="section-graph-controls" class="absolute top-4 right-4 z-40 space-y-2 pointer-events-none">
-        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
-          <div class="flex items-center space-x-2">
-            <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div id="section-graph-controls" class="absolute top-2 right-2 z-40 space-y-1 pointer-events-none">
+        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-md px-2 py-1 shadow-lg border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
+          <div class="flex items-center space-x-1">
+            <svg class="w-3 h-3 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
-            <span id="section-zoom-level" class="text-sm font-medium text-gray-900 dark:text-white">100%</span>
+            <span id="section-zoom-level" class="text-xs font-medium text-gray-900 dark:text-white">100%</span>
           </div>
         </div>
-        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg p-2 shadow-lg border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
-          <div class="flex flex-col space-y-1">
-            <button id="section-zoom-in" class="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors" title="Zoom In"><span>+</span></button>
-            <button id="section-zoom-out" class="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors" title="Zoom Out"><span>-</span></button>
-            <button id="section-reset-view" class="p-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded transition-colors" title="Reset View">⟳</button>
-            <button id="section-fit-view" class="p-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded transition-colors" title="Fit to View">⤢</button>
+        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-md p-1 shadow-lg border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
+          <div class="flex flex-col space-y-0.5">
+            <button id="section-zoom-in" class="p-1 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded text-xs transition-colors" title="Zoom In"><span>+</span></button>
+            <button id="section-zoom-out" class="p-1 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded text-xs transition-colors" title="Zoom Out"><span>-</span></button>
+            <button id="section-reset-view" class="p-1 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded text-xs transition-colors" title="Reset View">⟳</button>
+            <button id="section-fit-view" class="p-1 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded text-xs transition-colors" title="Fit to View">⤢</button>
           </div>
         </div>
-        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
+        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-md px-2 py-1 shadow-lg border border-gray-200/50 dark:border-gray-700/50 pointer-events-auto">
           <div class="text-xs text-gray-600 dark:text-gray-400">
             <div>X: <span id="section-mouse-x">0</span></div>
             <div>Y: <span id="section-mouse-y">0</span></div>
           </div>
         </div>
       </div>
-      <div class="absolute bottom-4 left-4 z-40 pointer-events-none" id="section-graph-instructions">
-        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg px-2 py-1.5 shadow-sm border border-gray-200/40 dark:border-gray-700/40 pointer-events-auto">
+      <div class="absolute bottom-2 left-2 z-40 pointer-events-none" id="section-graph-instructions">
+        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-md px-2 py-1 shadow-sm border border-gray-200/40 dark:border-gray-700/40 pointer-events-auto">
           <div class="text-xs text-gray-500 dark:text-gray-400 space-y-0.5">
             <div class="flex items-center space-x-1"><span>Arraste para mover</span></div>
             <div class="flex items-center space-x-1"><span>Scroll para zoom</span></div>
@@ -223,11 +223,11 @@ export class GraphSection {
         </div>
       </div>
       <!-- Card de Informações Flutuante -->
-      <div id="section-node-info-card" class="absolute top-4 left-4 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-4 shadow-xl border border-gray-200/50 dark:border-gray-700/50 max-w-sm z-50 opacity-0 transition-all duration-300 ease-out pointer-events-none transform scale-95">
-        <div class="flex items-center justify-between mb-3">
-          <h4 class="font-semibold text-gray-900 dark:text-white text-sm">Informações do Post</h4>
-          <button id="section-close-info" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div id="section-node-info-card" class="absolute top-2 left-2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-lg p-3 shadow-xl border border-gray-200/50 dark:border-gray-700/50 max-w-xs z-50 opacity-0 transition-all duration-300 ease-out pointer-events-none transform scale-95">
+        <div class="flex items-center justify-between mb-2">
+          <h4 class="font-semibold text-gray-900 dark:text-white text-xs">Informações do Post</h4>
+          <button id="section-close-info" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>

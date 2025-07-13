@@ -288,13 +288,36 @@ class BlogApp {
    * Renderiza a página inicial
    */
   renderHome(container) {
-    const homePage = new HomePage(this.postService.getAllPosts())
-    const content = homePage.render(this.translations.t.bind(this.translations))
-    container.appendChild(content)
+    const content = document.createElement('div')
+    content.className = 'min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200'
     
-    // Adiciona a seção de grafos
+    const wrapper = document.createElement('div')
+    wrapper.className = 'max-w-7xl mx-auto py-16 px-4'
+    
+    // Container para layout lado a lado
+    const sideBySideContainer = document.createElement('div')
+    sideBySideContainer.className = 'grid grid-cols-1 lg:grid-cols-2 gap-8 items-start'
+    
+    // Lado esquerdo - Posts Collection
+    const leftColumn = document.createElement('div')
+    leftColumn.className = 'flex flex-col items-center'
+    
+    const homePage = new HomePage(this.postService.getAllPosts())
+    const homeContent = homePage.render(this.translations.t.bind(this.translations))
+    leftColumn.appendChild(homeContent)
+    
+    // Lado direito - Graph Section
+    const rightColumn = document.createElement('div')
+    rightColumn.className = 'flex flex-col items-center'
+    
     const graphSection = this.graphSection.render()
-    container.appendChild(graphSection)
+    rightColumn.appendChild(graphSection)
+    
+    sideBySideContainer.appendChild(leftColumn)
+    sideBySideContainer.appendChild(rightColumn)
+    wrapper.appendChild(sideBySideContainer)
+    content.appendChild(wrapper)
+    container.appendChild(content)
   }
 
   /**
