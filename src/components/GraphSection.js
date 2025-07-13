@@ -104,13 +104,6 @@ export class GraphSection {
     
     section.innerHTML = `
       <div class="max-w-7xl mx-auto px-6">
-        <!-- Header da seção -->
-        <div class="text-center mb-8">
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-            Relacionamentos do Blog
-          </h2>
-        </div>
-
         <!-- Container principal -->
         <div class="flex justify-center">
           <!-- Grafo Centralizado -->
@@ -403,29 +396,51 @@ export class GraphSection {
     const infoContent = document.getElementById('section-node-info-content')
     
     if (infoCard && infoContent) {
-      let info = `<div class="font-semibold text-gray-900 dark:text-white mb-3 text-sm">${node.label}</div>`
-      
-      // Informações básicas do post
-      info += `
-        <div class="space-y-2 text-xs">
-          <div class="flex justify-between">
-            <span class="font-medium text-gray-500 dark:text-gray-400">Autor:</span>
-            <span class="text-gray-900 dark:text-white">${node.data.author}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-medium text-gray-500 dark:text-gray-400">Data:</span>
-            <span class="text-gray-900 dark:text-white">${node.data.date}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-medium text-gray-500 dark:text-gray-400">Categorias:</span>
-            <span class="text-gray-900 dark:text-white">${node.data.categories?.join(', ') || 'Nenhuma'}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="font-medium text-gray-500 dark:text-gray-400">Tags:</span>
-            <span class="text-gray-900 dark:text-white">${node.data.tags?.join(', ') || 'Nenhuma'}</span>
+      let info = `
+        <div class="mb-4">
+          <h5 class="text-lg font-bold text-gray-900 dark:text-white mb-2">${node.label}</h5>
+          <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <span>${node.data.author}</span>
+            <span>•</span>
+            <span>${node.data.date}</span>
           </div>
         </div>
       `
+      
+      // Categorias
+      if (node.data.categories && node.data.categories.length > 0) {
+        info += `
+          <div class="mb-4">
+            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Categorias</div>
+            <div class="flex flex-wrap gap-1">
+              ${node.data.categories.map(cat => `
+                <span class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded-lg font-medium">
+                  ${cat}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+        `
+      }
+      
+      // Tags
+      if (node.data.tags && node.data.tags.length > 0) {
+        info += `
+          <div class="mb-4">
+            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Tags</div>
+            <div class="flex flex-wrap gap-1">
+              ${node.data.tags.map(tag => `
+                <span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs rounded-lg font-medium">
+                  ${tag}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+        `
+      }
 
       // Encontrar conexões deste post
       const connections = this.graphData.links.filter(link => 
@@ -433,18 +448,35 @@ export class GraphSection {
       )
 
       if (connections.length > 0) {
-        info += `<div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-          <div class="text-xs font-medium text-gray-900 dark:text-white mb-2">Conexões: ${connections.length}</div>`
+        info += `
+          <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-2 mb-3">
+              <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+              </svg>
+              <span class="text-sm font-semibold text-gray-900 dark:text-white">${connections.length} conexões</span>
+            </div>
+        `
         
         // Agrupar conexões por tipo
         const categoryConnections = connections.filter(c => c.type === 'category' || c.type === 'both')
         const tagConnections = connections.filter(c => c.type === 'tag' || c.type === 'both')
         
         if (categoryConnections.length > 0) {
-          info += `<div class="text-xs text-red-600 dark:text-red-400">• ${categoryConnections.length} por categoria</div>`
+          info += `
+            <div class="flex items-center gap-2 mb-1">
+              <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+              <span class="text-xs text-gray-600 dark:text-gray-300">${categoryConnections.length} por categoria</span>
+            </div>
+          `
         }
         if (tagConnections.length > 0) {
-          info += `<div class="text-xs text-green-600 dark:text-green-400">• ${tagConnections.length} por tag</div>`
+          info += `
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span class="text-xs text-gray-600 dark:text-gray-300">${tagConnections.length} por tag</span>
+            </div>
+          `
         }
         info += `</div>`
       }
