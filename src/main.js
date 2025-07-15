@@ -3,7 +3,6 @@
  * Aplicação principal
  */
 
-import './style.css'
 import { marked } from 'https://cdn.jsdelivr.net/npm/marked@5.0.2/lib/marked.esm.js';
 import DOMPurify from 'https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.es.js';
 
