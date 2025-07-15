@@ -15,36 +15,40 @@ export class PostService {
 
   /**
    * Carrega todos os posts
-   */
-  async loadPosts() {
-    try {
-      // Carrega metadados
-      const metaRes = await fetch('posts/posts.json')
-      this.postsMeta = await metaRes.json()
+   */async loadPosts() {
+  try {
+    // Usando caminho absoluto para o JSON
+    const metaRes = await fetch('/posts/posts.json');
 
-      // Carrega conteúdo markdown
-      this.posts = await Promise.all(this.postsMeta.map(async meta => {
-        try {
-          const res = await fetch(meta.filename)
-          const content = res.ok ? await res.text() : ''
-          return { ...meta, content }
-        } catch {
-          return { ...meta, content: '' }
-        }
-      }))
-
-      // Extrai categorias e tags únicas
-      this.extractCategoriesAndTags()
-      
-      // Calcula contadores
-      this.calculateCounts()
-      
-      return this.posts
-    } catch (error) {
-      console.error('Erro ao carregar posts:', error)
-      return []
+    if (!metaRes.ok) {
+      throw new Error(`Erro ao buscar posts.json: ${metaRes.status} ${metaRes.statusText}`);
     }
+
+    this.postsMeta = await metaRes.json();
+
+    // Carrega conteúdo markdown
+    this.posts = await Promise.all(this.postsMeta.map(async meta => {
+      try {
+        const res = await fetch(meta.filename);
+        const content = res.ok ? await res.text() : '';
+        return { ...meta, content };
+      } catch {
+        return { ...meta, content: '' };
+      }
+    }));
+
+    // Extrai categorias e tags únicas
+    this.extractCategoriesAndTags();
+
+    // Calcula contadores
+    this.calculateCounts();
+
+    return this.posts;
+  } catch (error) {
+    console.error('Erro ao carregar posts:', error);
+    return [];
   }
+}
 
   /**
    * Extrai categorias e tags únicas dos posts
