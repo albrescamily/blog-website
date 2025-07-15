@@ -4,7 +4,6 @@
  */
 
 import './style.css'
-import { marked } from 'marked'
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
 import DOMPurify from 'dompurify'
 
