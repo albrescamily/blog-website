@@ -4,7 +4,7 @@
  */
 
 import './style.css'
-import { marked } from "https://cdn.jsdelivr.net/npm/marked/marked.min.js";
+import { marked } from 'https://cdn.jsdelivr.net/npm/marked@5.0.2/lib/marked.esm.js';
 import DOMPurify from 'dompurify'
 
 // Importações dos componentes
