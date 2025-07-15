@@ -1,4 +1,6 @@
 // vite.config.js
-export default {
-  base: '/blog-website/',
-}
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  base: '/blog-website/', // coloque o nome do seu repositório aqui
+});
