@@ -213,15 +213,6 @@ export class GraphSection {
           </div>
         </div>
       </div>
-      <div class="absolute bottom-2 left-2 z-40 pointer-events-none" id="section-graph-instructions">
-        <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-md px-2 py-1 shadow-sm border border-gray-200/40 dark:border-gray-700/40 pointer-events-auto">
-          <div class="text-xs text-gray-500 dark:text-gray-400 space-y-0.5">
-            <div class="flex items-center space-x-1"><span>Arraste para mover</span></div>
-            <div class="flex items-center space-x-1"><span>Scroll para zoom</span></div>
-            <div class="flex items-center space-x-1"><span>Clique para detalhes</span></div>
-          </div>
-        </div>
-      </div>
       <!-- Card de Informações Flutuante -->
       <div id="section-node-info-card" class="absolute top-4 left-4 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-lg p-4 shadow-xl border border-gray-200/50 dark:border-gray-700/50 max-w-64 z-50 opacity-0 transition-all duration-300 ease-out pointer-events-none transform scale-95">
         <div class="flex items-center justify-between mb-3">
@@ -848,8 +839,7 @@ export class GraphSection {
             <span class="text-gray-500 dark:text-gray-400">${bothConnections}</span>
           </div>
         </div>
-      `
-    }
+      `    }
 
     document.getElementById('section-node-count').textContent = posts.length
     document.getElementById('section-link-count').textContent = links.length
